@@ -90,6 +90,8 @@ int main(void)
   MX_TIM10_Init();
   /* USER CODE BEGIN 2 */
 
+  HAL_TIM_Base_Start_IT(&htim10);
+  HAL_TIM_Base_Start(&htim10);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -101,18 +103,7 @@ int main(void)
     /* USER CODE BEGIN 3 */
     if (HAL_GPIO_ReadPin (GPIOB, GPIO_PIN_7) == GPIO_PIN_RESET)
     {
-    	HAL_GPIO_WritePin (GPIOB, GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5, GPIO_PIN_RESET);
-    	//HAL_Delay (500);
-    	HAL_GPIO_WritePin (GPIOB, GPIO_PIN_5, GPIO_PIN_SET);
-    	HAL_Delay (500);
-    	HAL_GPIO_WritePin (GPIOB, GPIO_PIN_5, GPIO_PIN_RESET);
-    	//HAL_Delay (500);
-    	HAL_GPIO_WritePin (GPIOB, GPIO_PIN_4, GPIO_PIN_SET);
-    	HAL_Delay (500);
-    	HAL_GPIO_WritePin (GPIOB, GPIO_PIN_4, GPIO_PIN_RESET);
-    	//HAL_Delay (500);
-    	HAL_GPIO_WritePin (GPIOB, GPIO_PIN_3, GPIO_PIN_SET);
-    	HAL_Delay (500);
+
     }
     else
     {
@@ -179,9 +170,9 @@ static void MX_TIM10_Init(void)
 
   /* USER CODE END TIM10_Init 1 */
   htim10.Instance = TIM10;
-  htim10.Init.Prescaler = 0;
+  htim10.Init.Prescaler = 14999;
   htim10.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim10.Init.Period = 65535;
+  htim10.Init.Period = 499;
   htim10.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim10.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim10) != HAL_OK)
