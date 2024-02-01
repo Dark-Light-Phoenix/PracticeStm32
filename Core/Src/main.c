@@ -101,18 +101,7 @@ int main(void)
     /* USER CODE BEGIN 3 */
     if (HAL_GPIO_ReadPin (GPIOB, GPIO_PIN_7) == GPIO_PIN_RESET)
     {
-    	HAL_GPIO_WritePin (GPIOB, GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5, GPIO_PIN_RESET);
-    	//HAL_Delay (500);
-    	HAL_GPIO_WritePin (GPIOB, GPIO_PIN_5, GPIO_PIN_SET);
-    	HAL_Delay (500);
-    	HAL_GPIO_WritePin (GPIOB, GPIO_PIN_5, GPIO_PIN_RESET);
-    	//HAL_Delay (500);
-    	HAL_GPIO_WritePin (GPIOB, GPIO_PIN_4, GPIO_PIN_SET);
-    	HAL_Delay (500);
-    	HAL_GPIO_WritePin (GPIOB, GPIO_PIN_4, GPIO_PIN_RESET);
-    	//HAL_Delay (500);
-    	HAL_GPIO_WritePin (GPIOB, GPIO_PIN_3, GPIO_PIN_SET);
-    	HAL_Delay (500);
+    	
     }
     else
     {
