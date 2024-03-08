@@ -22,6 +22,7 @@
 #include "stm32f4xx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -51,7 +52,7 @@
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+extern uint8_t tim10_count;
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
@@ -208,8 +209,23 @@ void TIM1_UP_TIM10_IRQHandler(void)
   /* USER CODE END TIM1_UP_TIM10_IRQn 0 */
   HAL_TIM_IRQHandler(&htim10);
   /* USER CODE BEGIN TIM1_UP_TIM10_IRQn 1 */
-  HAL_GPIO_TogglePin(GPIOB,GPIO_PIN_5);
-
+  switch (tim10_count)
+  {
+  	  	  case 0:
+  	  		  HAL_GPIO_WritePin (GPIOB, GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5, GPIO_PIN_RESET);
+  	  		  HAL_GPIO_WritePin (GPIOB, GPIO_PIN_3, GPIO_PIN_SET);
+  	  		  break;
+  	  	  case 1:
+  	  		  HAL_GPIO_WritePin (GPIOB, GPIO_PIN_3, GPIO_PIN_RESET);
+		  	  HAL_GPIO_WritePin (GPIOB, GPIO_PIN_4, GPIO_PIN_SET);
+		  	  break;
+  	  	  case 2:
+  	  		  HAL_GPIO_WritePin (GPIOB, GPIO_PIN_4, GPIO_PIN_RESET);
+  	  		  HAL_GPIO_WritePin (GPIOB, GPIO_PIN_5, GPIO_PIN_SET);
+  	  		  break;
+  }
+  if (tim10_count < 2) tim10_count++;
+  else tim10_count = 0;
   /* USER CODE END TIM1_UP_TIM10_IRQn 1 */
 }
 

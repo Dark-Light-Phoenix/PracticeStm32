@@ -21,7 +21,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+uint8_t tim10_count;
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -43,7 +43,7 @@
 TIM_HandleTypeDef htim10;
 
 /* USER CODE BEGIN PV */
-uint8_t buttonState = GPIO_PIN_SET;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -51,7 +51,7 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_TIM10_Init(void);
 /* USER CODE BEGIN PFP */
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim);
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -88,27 +88,38 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_TIM10_Init();
+  tim10_count = 0;
   /* USER CODE BEGIN 2 */
-
-  HAL_TIM_Base_Start_IT(&htim10);
-  HAL_TIM_Base_Start(&htim10);
+  HAL_TIM_Base_Start_IT (&htim10);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-   while (1)
+  while (1)
   {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    if (HAL_GPIO_ReadPin (GPIOB, GPIO_PIN_7) == GPIO_PIN_RESET)
-    {
-    	
-    }
-    else
-    {
-    	HAL_GPIO_WritePin (GPIOB, GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5, GPIO_PIN_RESET);
-    }
+	  if (HAL_GPIO_ReadPin (GPIOB, GPIO_PIN_7) == GPIO_PIN_RESET)
+	  {
+		  HAL_TIM_Base_Start (&htim10);
+		  HAL_TIM_Base_Start_IT (&htim10);
+	  }
+	  else
+	  {
+		  tim10_count = 0;
+		  HAL_TIM_Base_Stop (&htim10);
+		  HAL_TIM_Base_Stop_IT (&htim10);
+		  HAL_GPIO_WritePin (GPIOB, GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5, GPIO_PIN_RESET);
+	  }
+	  /*if (HAL_GPIO_ReadPin (GPIOA, GPIO_PIN_0) == GPIO_PIN_SET)
+	  {
+		  HAL_GPIO_WritePin (GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
+	  } else
+	  {
+		  HAL_GPIO_WritePin (GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
+	  }*/
+
   }
   /* USER CODE END 3 */
 }
@@ -170,7 +181,7 @@ static void MX_TIM10_Init(void)
 
   /* USER CODE END TIM10_Init 1 */
   htim10.Instance = TIM10;
-  htim10.Init.Prescaler = 14999;
+  htim10.Init.Prescaler = 15999;
   htim10.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim10.Init.Period = 499;
   htim10.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
@@ -220,22 +231,6 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-
-// Callback function called when TIM10 period elapses
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
-  if (htim->Instance == TIM10) {
-    // Read the button state
-    uint8_t currentButtonState = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_2);
-
-    // Check for a button press (transition from high to low)
-    if (buttonState == GPIO_PIN_SET && currentButtonState == GPIO_PIN_RESET) {
-      HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13); // Toggle the LED
-    }
-
-    // Update the button state for the next iteration
-    buttonState = currentButtonState;
-  }
-}
 
 /* USER CODE END 4 */
 
